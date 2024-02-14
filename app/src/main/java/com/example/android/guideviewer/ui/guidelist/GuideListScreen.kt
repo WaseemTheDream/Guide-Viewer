@@ -26,6 +26,7 @@ import com.example.android.guideviewer.R
 import com.example.android.guideviewer.data.model.ApiResult
 import com.example.android.guideviewer.data.model.Guide
 import com.example.android.guideviewer.data.model.GuideList
+import com.example.android.guideviewer.ui.common.ErrorMessage
 import com.example.android.guideviewer.ui.common.PageLoader
 
 
@@ -40,8 +41,16 @@ fun GuideListScreen(
             PageLoader(
                 modifier = Modifier.fillMaxSize(),
                 loadingMessage = stringResource(id = R.string.loading_data))
-        is ApiResult.Failure -> Text(text = (guides as ApiResult.Failure).message ?: "Unknown Error")
-        is ApiResult.Success -> GuideList(guides as ApiResult.Success<GuideList>)
+        is ApiResult.Failure -> {
+            val errorMessage =
+                (guides as ApiResult.Failure).message ?: stringResource(id = R.string.unknown_error)
+            ErrorMessage(
+                message = errorMessage,
+                modifier = Modifier.fillMaxSize().padding(20.dp),
+                onClickRetry = { viewModel.getGuides() })
+        }
+        is ApiResult.Success ->
+            GuideList(guides as ApiResult.Success<GuideList>)
     }
 }
 

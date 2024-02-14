@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import javax.inject.Inject
+import kotlin.random.Random
 
 class GuideRepositoryImpl @Inject constructor(
     private val guideApi: GuideApi
@@ -15,6 +16,11 @@ class GuideRepositoryImpl @Inject constructor(
     override suspend fun getGuides(): Flow<ApiResult<GuideList>> = flow {
         try {
             val response = guideApi.getGuides()
+
+            if (Random.nextInt(0, 100) >= 50) {
+                emit(ApiResult.Failure("Random Error", IllegalStateException()))
+                return@flow
+            }
 
             if (!response.isSuccessful || response.body() == null) {
                 emit(ApiResult.Failure(response.errorBody()?.string(), HttpException(response)))
