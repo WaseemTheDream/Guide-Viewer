@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.android.guideviewer.BuildConfig
 import com.example.android.guideviewer.R
 import com.example.android.guideviewer.data.model.ApiResult
 import com.example.android.guideviewer.data.model.Guide
@@ -48,7 +49,7 @@ fun GuideListScreen(viewModel: GuideListViewModel = hiltViewModel()) {
                     .background(MaterialTheme.colorScheme.primary),
                 verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "Build Variant",
+                    text = BuildConfig.BUILD_VARIANT,
                     color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .padding(vertical = 16.dp, horizontal = 16.dp)

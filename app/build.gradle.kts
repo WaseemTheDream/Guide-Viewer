@@ -8,6 +8,7 @@ plugins {
 android {
     namespace = "com.example.android.guideviewer"
     compileSdk = 34
+    buildFeatures.buildConfig = true
 
     defaultConfig {
         applicationId = "com.example.android.guideviewer"
@@ -24,11 +25,23 @@ android {
 
     buildTypes {
         release {
+            buildConfigField("String", "BUILD_VARIANT", "\"Build Release\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        getByName("debug") {
+            buildConfigField("String", "BUILD_VARIANT", "\"Build Debug\"")
+        }
+        create("build_a") {
+            buildConfigField("String", "BUILD_VARIANT", "\"Build A\"")
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        create("build_b") {
+            buildConfigField("String", "BUILD_VARIANT", "\"Build B\"")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -49,6 +62,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    flavorDimensions += listOf("version")
 }
 
 dependencies {
