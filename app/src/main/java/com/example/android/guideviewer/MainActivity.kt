@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.android.guideviewer.core.network.GuideApi
+import com.example.android.guideviewer.data.model.ApiResult
+import com.example.android.guideviewer.data.repository.GuideRepository
 import com.example.android.guideviewer.ui.theme.GuideViewerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
@@ -21,13 +23,20 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject lateinit var guideApi: GuideApi
+    @Inject lateinit var guideRepository: GuideRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         GlobalScope.launch {
-            guideApi.getGuides().body()?.guides?.get(0)?.let { Log.d("MainActivity", it.name) }
+            guideRepository.getGuides().collect { result
+                ->
+                if (result is ApiResult.Failure) {
+                    result.message?.let { it1 -> Log.d("MainActivity", it1) }
+                } else if (result is ApiResult.Success) {
+                    result.value.guides.let { Log.d("MainActivity", it[0].name) }
+                }
+            }
         }
 
         setContent {
