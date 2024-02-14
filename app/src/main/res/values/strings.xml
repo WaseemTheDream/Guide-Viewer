@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Guide Viewer</string>
+
+    <string name="loading_data">Loading guides from server</string>
 </resources>
