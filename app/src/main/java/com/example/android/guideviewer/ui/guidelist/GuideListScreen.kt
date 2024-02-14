@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.example.android.guideviewer.BuildConfig
 import com.example.android.guideviewer.R
 import com.example.android.guideviewer.data.model.ApiResult
@@ -109,19 +110,28 @@ fun GuideList(
 
 @Composable
 fun ItemGuide(
-    guide: Guide
-) {
+    guide: Guide) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(0.9f),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)) {
-        Text(
-            modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
-            text = guide.name,
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp)
-        Text(
-            modifier = Modifier.padding(bottom = 8.dp, start = 8.dp, end = 8.dp),
-            text = guide.startDate,
-            fontSize = 12.sp)
+        Row {
+            AsyncImage(
+                modifier = Modifier
+                    .size(50.dp)
+                    .padding(4.dp),
+                model = guide.icon,
+                contentDescription = guide.name)
+            Column {
+                Text(
+                    modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
+                    text = guide.name,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp)
+                Text(
+                    modifier = Modifier.padding(bottom = 8.dp, start = 8.dp, end = 8.dp),
+                    text = guide.startDate,
+                    fontSize = 12.sp)
+            }
+        }
     }
 }
